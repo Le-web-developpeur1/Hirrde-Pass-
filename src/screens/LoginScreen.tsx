@@ -1,19 +1,22 @@
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
 import {
-  View,
+  ActivityIndicator,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
-  Alert,
-  ActivityIndicator,
+  View,
+  ScrollView
 } from 'react-native';
-import { s, vs, ms } from '../utils/scale';
-import { colors } from '../utils/colors';
 import { getScannerByPhone } from '../firebase/users';
-import { useNavigation } from '@react-navigation/native';
 import { RootStackParams } from '../navigation/types';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { colors } from '../utils/colors';
+import { ms, s, vs } from '../utils/scale';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParams>;
 
@@ -64,52 +67,67 @@ export default function LoginScreen() {
   
 
   return (
-    <View style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.title}>
-          Hirr<Text style={styles.titleGold}>dé</Text>
-        </Text>
-        <Text style={styles.subtitle}>Scanner de tickets</Text>
+    <KeyboardAvoidingView 
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={0}
+    >
+      <ScrollView 
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.content}>
+          <Text style={styles.title}>
+            Hirr<Text style={styles.titleGold}>dé</Text>
+          </Text>
+          <Text style={styles.subtitle}>Scanner de tickets</Text>
 
-        <View style={styles.form}>
-          <Text style={styles.label}>Numéro de téléphone</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="+224626058033"
-            placeholderTextColor={colors.muted}
-            value={phoneNumber}
-            onChangeText={setPhoneNumber}
-            keyboardType="phone-pad"
-            autoCapitalize="none"
-          />
-          <Text style={styles.hint}>Format international requis</Text>
+          <View style={styles.form}>
+            <Text style={styles.label}>Numéro de téléphone</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="+224626058033"
+              placeholderTextColor={colors.muted}
+              value={phoneNumber}
+              onChangeText={setPhoneNumber}
+              keyboardType="phone-pad"
+              autoCapitalize="none"
+            />
+            <Text style={styles.hint}>Format international requis</Text>
 
-          <TouchableOpacity
-            style={[styles.button, loading && styles.buttonDisabled]}
-            onPress={handleSendCode}
-            disabled={loading}
-          >
-            {loading ? (
-              <ActivityIndicator color={colors.bg} />
-            ) : (
-              <Text style={styles.buttonText}>Recevoir le code</Text>
-            )}
-          </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.button, loading && styles.buttonDisabled]}
+              onPress={handleSendCode}
+              disabled={loading}
+            >
+              {loading ? (
+                <ActivityIndicator color={colors.bg} />
+              ) : (
+                <Text style={styles.buttonText}>Recevoir le code</Text>
+              )}
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-    </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    paddingTop: vs(40),
     flex: 1,
     backgroundColor: colors.bg,
+  },
+  scrollContent: {
+    flexGrow: 1,
   },
   content: {
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: s(30),
+    paddingBottom: vs(100), // Espace pour éviter les boutons de navigation
   },
   title: {
     fontSize: ms(48),
@@ -125,7 +143,7 @@ const styles = StyleSheet.create({
     fontSize: ms(14),
     color: colors.muted,
     textAlign: 'center',
-    marginBottom: vs(60),
+    marginBottom: vs(40),
   },
   form: {
     gap: vs(16),

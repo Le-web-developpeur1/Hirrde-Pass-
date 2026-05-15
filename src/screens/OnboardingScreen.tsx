@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     paddingHorizontal: s(40),
-    paddingBottom: vs(50),
+    paddingBottom: vs(80), // Augmenté pour éviter les boutons de navigation
   },
   pagination: {
     flexDirection: 'row',

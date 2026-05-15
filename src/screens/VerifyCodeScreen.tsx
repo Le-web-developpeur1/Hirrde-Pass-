@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -9,7 +9,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { RootStackParams } from '../navigation/types';
 import { colors } from '../utils/colors';
@@ -29,25 +29,27 @@ export default function VerifyCodeScreen() {
   const [loading, setLoading] = useState(false);
   const inputRefs = useRef<(TextInput | null)[]>([]);
 
-  const handleCodeChange = (text: string, index: number) => {
-    const newCode = [...code];
-    newCode[index] = text;
-    setCode(newCode);
+  const handleCodeChange = useCallback((text: string, index: number) => {
+    setCode((prevCode) => {
+      const newCode = [...prevCode];
+      newCode[index] = text;
+      return newCode;
+    });
 
     // Auto-focus sur le champ suivant
     if (text && index < 5) {
       inputRefs.current[index + 1]?.focus();
     }
-  };
+  }, []);
 
-  const handleKeyPress = (e: any, index: number) => {
+  const handleKeyPress = useCallback((e: any, index: number) => {
     // Retour arrière
     if (e.nativeEvent.key === 'Backspace' && !code[index] && index > 0) {
       inputRefs.current[index - 1]?.focus();
     }
-  };
+  }, [code]);
 
-  const handleVerify = async () => {
+  const handleVerify = useCallback(async () => {
     const fullCode = code.join('');
     
     if (fullCode.length !== 6) {
@@ -58,15 +60,17 @@ export default function VerifyCodeScreen() {
     setLoading(true);
   
     try {
-      // Pour le dev, accepter le code 123456
-      if (fullCode === '123456') {
-        // Vérifier que scanner existe
-        if (!scanner) {
-          Alert.alert('Erreur', 'Données du scanner manquantes');
-          setLoading(false);
-          return;
-        }
-  
+      // Vérifier que scanner existe
+      if (!scanner) {
+        Alert.alert('Erreur', 'Données du scanner manquantes');
+        setLoading(false);
+        return;
+      }
+
+      // Vérifier le PIN code
+      const scannerPinCode = scanner.pinCode || '123456'; // Par défaut 123456 si pas de PIN
+      
+      if (fullCode === scannerPinCode) {
         // Nettoyer l'objet scanner pour le stockage
         const cleanScanner = {
           id: scanner.id,
@@ -86,7 +90,10 @@ export default function VerifyCodeScreen() {
         
         navigation.replace('Scanner');
       } else {
-        Alert.alert('Erreur', 'Code incorrect. Utilise 123456 pour le test.');
+        Alert.alert('Erreur', 'Code PIN incorrect');
+        // Réinitialiser les champs
+        setCode(['', '', '', '', '', '']);
+        inputRefs.current[0]?.focus();
       }
     } catch (error: any) {
       console.error('Erreur complète:', error);
@@ -94,33 +101,39 @@ export default function VerifyCodeScreen() {
     } finally {
       setLoading(false);
     }
-  };
-  
-  
+  }, [code, scanner, phoneNumber, navigation]);
 
-  const handleResend = () => {
-    Alert.alert('Info', 'En mode dev, utilise toujours le code 123456');
-    setCode(['', '', '', '', '', '']);
-    inputRefs.current[0]?.focus();
-  };
+  const handleResend = useCallback(() => {
+    Alert.alert(
+      'Code PIN oublié ?', 
+      'Contactez votre administrateur ou votre organisateur pour réunitialiser votre Code PIN',
+      [{ text: 'OK' }]
+    );
+  }, []);
+
+  const handleGoBack = useCallback(() => {
+    navigation.goBack();
+  }, [navigation]);
+
+  const buttonStyle = useMemo(() => [
+    styles.button, 
+    loading && styles.buttonDisabled
+  ], [loading]);
 
   return (
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.backButton}
-        onPress={() => navigation.goBack()}
+        onPress={handleGoBack}
       >
         <Text style={styles.backText}>← Retour</Text>
       </TouchableOpacity>
 
       <View style={styles.content}>
-        <Text style={styles.title}>Code de vérification</Text>
+        <Text style={styles.title}>Code PIN</Text>
         <Text style={styles.subtitle}>
-          Code envoyé au {phoneNumber}
+          Entre ton code PIN à 6 chiffres
         </Text>
-        {/* <Text style={styles.devHint}>
-          💡 Mode dev : utilise le code 123456
-        </Text> */}
 
         <View style={styles.codeContainer}>
           {code.map((digit, index) => (
@@ -141,7 +154,7 @@ export default function VerifyCodeScreen() {
         </View>
 
         <TouchableOpacity
-          style={[styles.button, loading && styles.buttonDisabled]}
+          style={buttonStyle}
           onPress={handleVerify}
           disabled={loading}
         >
@@ -153,7 +166,7 @@ export default function VerifyCodeScreen() {
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.resendButton} onPress={handleResend}>
-          <Text style={styles.resendText}>Renvoyer le code</Text>
+          <Text style={styles.resendText}>Code PIN oublié ?</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -178,6 +191,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: s(30),
+    paddingBottom: vs(100),
   },
   title: {
     fontSize: ms(28),
@@ -220,6 +234,7 @@ const styles = StyleSheet.create({
     paddingVertical: vs(16),
     borderRadius: s(12),
     alignItems: 'center',
+    marginBottom: vs(20),
   },
   buttonDisabled: {
     opacity: 0.5,
@@ -230,7 +245,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   resendButton: {
-    marginTop: vs(20),
     alignItems: 'center',
   },
   resendText: {

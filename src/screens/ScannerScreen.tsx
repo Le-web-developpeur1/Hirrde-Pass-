@@ -394,6 +394,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     padding: s(20),
+    paddingBottom: vs(40), // Augmenté pour éviter les boutons de navigation
     alignItems: 'center',
     backgroundColor: colors.surface,
   },

@@ -7,6 +7,7 @@ export interface Scanner {
     role: string;
     isActive: boolean;
     eventAssigned?: string;
+    pinCode?: string; // Code PIN à 6 chiffres
 }
 
 export type RootStackParams = {
