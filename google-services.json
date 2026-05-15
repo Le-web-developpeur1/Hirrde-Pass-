@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "597549685708",
+    "project_id": "hirrde-pass",
+    "storage_bucket": "hirrde-pass.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:597549685708:android:88b8375330c489e4f9db69",
+        "android_client_info": {
+          "package_name": "com.hirrde.pass"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "597549685708-afk6ouduoamchco0hrkhid3nee3uudcg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkq-u1YiPVrVMv3WRto2zgKSFYBlKmfOI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "597549685708-afk6ouduoamchco0hrkhid3nee3uudcg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

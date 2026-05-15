@@ -1,21 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Alert,
-  Vibration,
-  ScrollView,
-} from 'react-native';
-import { CameraView, useCameraPermissions } from 'expo-camera';
-import { s, vs, ms } from '../utils/scale';
-import { colors } from '../utils/colors';
-import { validateTicket, getTicketStats } from '../firebase/tickets';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-import { RootStackParams } from '../navigation/types';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { CameraView, useCameraPermissions } from 'expo-camera';
+import React, { useEffect, useState } from 'react';
+import {
+    Alert,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    Vibration,
+    View
+} from 'react-native';
+import { getTicketStats, validateTicket } from '../firebase/tickets';
+import { RootStackParams } from '../navigation/types';
+import { colors } from '../utils/colors';
+import { ms, s, vs } from '../utils/scale';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParams>;
 
@@ -97,7 +96,7 @@ export default function ScannerScreen() {
   
       Alert.alert(
         '✅ Ticket validé',
-        `Numéro: ${result.ticket.numeroUnique || result.ticket.serialNumber || ticketId}\nStatut: Validé avec succès`,
+        `Numéro: ${result?.ticket?.numeroUnique || result?.ticket?.serialNumber || ticketId || 'N/A'}\nStatut: Validé avec succès`,
         [
           {
             text: 'Scanner un autre',
@@ -223,15 +222,18 @@ export default function ScannerScreen() {
       </View>
 
       {/* Caméra */}
-      <CameraView
-        style={styles.camera}
-        facing="back"
-        enableTorch={flashOn}
-        onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
-        barcodeScannerSettings={{
-          barcodeTypes: ['qr'],
-        }}
-      >
+      <View style={styles.cameraContainer}>
+        <CameraView
+          style={styles.camera}
+          facing="back"
+          enableTorch={flashOn}
+          onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
+          barcodeScannerSettings={{
+            barcodeTypes: ['qr'],
+          }}
+        />
+        
+        {/* Overlay en position absolue */}
         <View style={styles.overlay}>
           <View style={styles.scanArea}>
             <View style={[styles.corner, styles.topLeft]} />
@@ -244,7 +246,7 @@ export default function ScannerScreen() {
             Placez le QR code dans le cadre
           </Text>
         </View>
-      </CameraView>
+      </View>
 
       {/* Footer */}
       <View style={styles.footer}>
@@ -332,11 +334,19 @@ const styles = StyleSheet.create({
     color: colors.muted,
     textAlign: 'center',
   },
+  cameraContainer: {
+    flex: 1,
+    position: 'relative',
+  },
   camera: {
     flex: 1,
   },
   overlay: {
-    flex: 1,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     backgroundColor: 'rgba(0,0,0,0.5)',
     justifyContent: 'center',
     alignItems: 'center',

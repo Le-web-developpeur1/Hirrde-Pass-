@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "hirrde-pass",
+    "name": "Hirrde Pass",
     "slug": "hirrde-pass",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "src/assets/images/icon.png",
+    "icon": "./src/assets/images/logo.png",
     "scheme": "hirrdepass",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -14,23 +14,27 @@
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+        "foregroundImage": "./src/assets/images/logo.png",
+        "backgroundImage": "./src/assets/images/logo.png",
+        "monochromeImage": "./src/assets/images/logo.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.CAMERA"
+      ],
+      "package": "com.hirrde.pass",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "output": "static",
       "favicon": "src/assets/images/favicon.png"
     },
     "plugins": [
-      "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./src/assets/images/logo.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff",
@@ -39,11 +43,22 @@
           }
         }
       ],
-      "expo-barcode-scanner"
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera to scan QR codes."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "574c6681-a62b-4491-b5de-c0c42d15b061"
+      }
     }
   }
 }

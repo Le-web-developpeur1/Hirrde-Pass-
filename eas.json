@@ -1,0 +1,48 @@
+{
+  "cli": {
+    "version": ">= 18.4.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_FIREBASE_API_KEY": "AIzaSyBUVMhx3hOy66bIcHONsZrRqwbV_5lwCO0",
+        "EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN": "hirrde-pass.firebaseapp.com",
+        "EXPO_PUBLIC_FIREBASE_PROJECT_ID": "hirrde-pass",
+        "EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET": "hirrde-pass.firebasestorage.app",
+        "EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID": "597549685708",
+        "EXPO_PUBLIC_FIREBASE_APP_ID": "1:597549685708:android:88b8375330c489e4f9db69",
+        "EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID": "G-8QRSTVKP0J"
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_FIREBASE_API_KEY": "AIzaSyBUVMhx3hOy66bIcHONsZrRqwbV_5lwCO0",
+        "EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN": "hirrde-pass.firebaseapp.com",
+        "EXPO_PUBLIC_FIREBASE_PROJECT_ID": "hirrde-pass",
+        "EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET": "hirrde-pass.firebasestorage.app",
+        "EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID": "597549685708",
+        "EXPO_PUBLIC_FIREBASE_APP_ID": "1:597549685708:android:88b8375330c489e4f9db69",
+        "EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID": "G-8QRSTVKP0J"
+      }
+    },
+    "production": {
+      "autoIncrement": true,
+      "env": {
+        "EXPO_PUBLIC_FIREBASE_API_KEY": "AIzaSyBUVMhx3hOy66bIcHONsZrRqwbV_5lwCO0",
+        "EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN": "hirrde-pass.firebaseapp.com",
+        "EXPO_PUBLIC_FIREBASE_PROJECT_ID": "hirrde-pass",
+        "EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET": "hirrde-pass.firebasestorage.app",
+        "EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID": "597549685708",
+        "EXPO_PUBLIC_FIREBASE_APP_ID": "1:597549685708:android:88b8375330c489e4f9db69",
+        "EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID": "G-8QRSTVKP0J"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}

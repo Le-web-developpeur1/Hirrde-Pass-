@@ -118,9 +118,9 @@ export default function VerifyCodeScreen() {
         <Text style={styles.subtitle}>
           Code envoyé au {phoneNumber}
         </Text>
-        <Text style={styles.devHint}>
+        {/* <Text style={styles.devHint}>
           💡 Mode dev : utilise le code 123456
-        </Text>
+        </Text> */}
 
         <View style={styles.codeContainer}>
           {code.map((digit, index) => (

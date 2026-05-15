@@ -23,8 +23,11 @@ import { db } from './config';
       }
       
       return { id: ticketDoc.id, ...ticketDoc.data() } as Ticket;
-    } catch (error) {
-      console.error('Erreur getTicketById:', error);
+    } catch (error: any) {
+      // Ne logger que si ce n'est pas une erreur "ticket non trouvé"
+      if (error.message !== 'TICKET_NOT_FOUND') {
+        console.error('Erreur getTicketById:', error);
+      }
       throw error;
     }
   };
@@ -54,8 +57,12 @@ import { db } from './config';
       });
       
       return { success: true, ticket };
-    } catch (error) {
-      console.error('Erreur validateTicket:', error);
+    } catch (error: any) {
+      // Ne logger que les erreurs inattendues (pas les erreurs métier)
+      const expectedErrors = ['TICKET_ALREADY_VALIDATED', 'TICKET_EXPIRED', 'TICKET_NOT_FOUND'];
+      if (!expectedErrors.includes(error.message)) {
+        console.error('Erreur validateTicket:', error);
+      }
       throw error;
     }
   };
